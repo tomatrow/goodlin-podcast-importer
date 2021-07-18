@@ -162,6 +162,12 @@ class Podcast_Importer_Secondline {
 						<em>Optional: Add <code>[podcast_title]</code> to display the show name.</em>
 					</label>
 					<input type="text" id="<?php echo esc_attr($post_id_to_update); ?>_secondline_prepend_title" name="secondline_prepend_title" placeholder="Ex: My Podcast" value="<?php echo esc_attr(get_post_meta($post_id_to_update, 'secondline_prepend_title', true)); ?>"></input>
+                    
+                    
+					<label for="<?php echo esc_attr($post_id_to_update); ?>_secondline_excerpt_count" class="slt-form-label">
+						Excerpt Character Count
+					</label>
+					<input id="<?php echo esc_attr($post_id_to_update); ?>_secondline_excerpt_count" type="number" name="secondline_excerpt_count" value="<?php echo esc_attr(get_post_meta($post_id_to_update, 'secondline_excerpt_count', true)); ?>"></input>
 				</div>
 			</div>
 
@@ -347,6 +353,11 @@ class Podcast_Importer_Secondline {
 			update_post_meta($post_id_to_update, 'secondline_prepend_title', $secondline_prepend_title);
 		}
 	}
+    
+    function secondline_create_excerpt($content, $count) {
+        if (empty($count)) $count = '40';
+        return substr(strip_tags($content), 0, intval($count));
+    }
 
 	// Main import function
 	function secondline_podcast_import() {
@@ -528,6 +539,9 @@ class Podcast_Importer_Secondline {
 					} else {
 						$secondline_parsed_content = $this->secondline_sanitize_data($itunes->summary);
 					}
+                    
+                    // grab content before truncation
+                    $excerpt = $this->secondline_create_excerpt($secondline_parsed_content, $secondline_excerpt_count);
 
 					if ($secondline_truncate_post) {
 						$secondline_parsed_content = substr($secondline_parsed_content, 0, intval($secondline_truncate_post));
@@ -546,7 +560,7 @@ class Podcast_Importer_Secondline {
 						'post_author'  => $secondline_import_author,
 						'post_content' => $secondline_post_content,
 						'post_date'    => $post_date,
-						'post_excerpt' => $this->secondline_sanitize_data($itunes->subtitle),
+						'post_excerpt' => $excerpt,
 						'post_status'  => $secondline_import_publish,
 						'post_type'    => $secondline_import_post_type,
 						'post_title'   => $post_title,
@@ -721,7 +735,6 @@ class Podcast_Importer_Secondline {
 		}
 	}
 
-
 	function secondline_scheduled_podcast_import() {
 
 		// Load post.php class for post manipulations during cron
@@ -768,6 +781,7 @@ class Podcast_Importer_Secondline {
 				$secondline_content_tag = get_post_meta($post->ID, 'secondline_content_tag', true);
 				$secondline_truncate_post = get_post_meta($post->ID, 'secondline_truncate_post', true);
 				$secondline_prepend_title = get_post_meta($post->ID, 'secondline_prepend_title', true);
+                $secondline_excerpt_count = get_post_meta($post->ID, '$secondline_excerpt_count', true);
 
 				$secondline_rss_feed = @simplexml_load_file($secondline_rss_feed_url);
 				if(empty($secondline_rss_feed) && !empty($secondline_rss_feed_url)) {
@@ -879,7 +893,10 @@ class Podcast_Importer_Secondline {
 						} else {
 							$secondline_parsed_content = $this->secondline_sanitize_data($itunes->summary);
 						}
-
+                        
+                        // grab content before truncation
+                        $excerpt = $this->secondline_create_excerpt($secondline_parsed_content, $secondline_excerpt_count);
+                        
 						if ($secondline_truncate_post) {
 							$secondline_parsed_content = substr($secondline_parsed_content, 0, intval($secondline_truncate_post));
 						}
@@ -891,12 +908,13 @@ class Podcast_Importer_Secondline {
 							$secondline_post_content = $secondline_parsed_content;
 						}
 
+
 						// Create the post content
 						$post = array(
 							'post_author'  => $post_author,
 							'post_content' => $secondline_post_content,
 							'post_date'    => $post_date,
-							'post_excerpt' => $this->secondline_sanitize_data($itunes->subtitle),
+							'post_excerpt' => $excerpt,
 							'post_status'  => $secondline_import_publish,
 							'post_title'   => $post_title,
 							'post_type'    => $secondline_import_post_type,
