@@ -167,7 +167,7 @@ class Podcast_Importer_Secondline {
 					<label for="<?php echo esc_attr($post_id_to_update); ?>_secondline_excerpt_count" class="slt-form-label">
 						Excerpt Character Count
 					</label>
-					<input id="<?php echo esc_attr($post_id_to_update); ?>_secondline_excerpt_count" type="number" name="secondline_excerpt_count" value="<?php echo esc_attr(get_post_meta($post_id_to_update, 'secondline_excerpt_count', true)); ?>"></input>
+					<input id="<?php echo esc_attr($post_id_to_update); ?>_secondline_excerpt_count" min="0" type="number" name="secondline_excerpt_count" value="<?php echo esc_attr(get_post_meta($post_id_to_update, 'secondline_excerpt_count', true)); ?>"></input>
 				</div>
 			</div>
 
