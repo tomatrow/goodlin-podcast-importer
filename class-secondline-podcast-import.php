@@ -785,7 +785,7 @@ class Podcast_Importer_Secondline {
 				$secondline_content_tag = get_post_meta($post->ID, 'secondline_content_tag', true);
 				$secondline_truncate_post = get_post_meta($post->ID, 'secondline_truncate_post', true);
 				$secondline_prepend_title = get_post_meta($post->ID, 'secondline_prepend_title', true);
-                $secondline_excerpt_count = get_post_meta($post->ID, '$secondline_excerpt_count', true);
+                $secondline_excerpt_count = get_post_meta($post->ID, 'secondline_excerpt_count', true);
 
 				$secondline_rss_feed = @simplexml_load_file($secondline_rss_feed_url);
 				if(empty($secondline_rss_feed) && !empty($secondline_rss_feed_url)) {
