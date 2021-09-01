@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       Podcast Importer SecondLine
+ * Plugin Name:       Podcast Importer SecondLine (tomatrow)
  * Description:       A simple podcast import plugin with ongoing podcast feed import features.
  * Version:           1.2.5
  * Author:            SecondLineThemes
