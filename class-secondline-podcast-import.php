@@ -446,6 +446,9 @@ class Podcast_Importer_Secondline {
 			if (isset($_POST['secondline_prepend_title'])) {
 				$secondline_prepend_title = sanitize_text_field($_POST['secondline_prepend_title']);
 			}
+			if (isset($_POST['secondline_excerpt_count'])) {
+				$secondline_excerpt_count = sanitize_text_field($_POST['secondline_excerpt_count']);
+			}
 
 			// Set up a new post per item that appears in the feed
 			if( !empty( $secondline_rss_feed ) ) {
@@ -717,6 +720,7 @@ class Podcast_Importer_Secondline {
 						add_post_meta($post_import_id, 'secondline_content_tag', $secondline_content_tag, true);
 						add_post_meta($post_import_id, 'secondline_truncate_post', $secondline_truncate_post, true);
 						add_post_meta($post_import_id, 'secondline_prepend_title', $secondline_prepend_title, true);
+                        add_post_meta($post_import_id, 'secondline_excerpt_count', $secondline_excerpt_count, true);
 
 					} else {
 						echo '<br><br>' . esc_html__('This podcast is already being scheduled for import. Delete the previous schedule to create a new one.', 'podcast-importer-secondline' ) . '<br><br>';
