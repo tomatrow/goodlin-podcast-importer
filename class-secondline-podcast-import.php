@@ -356,7 +356,14 @@ class Podcast_Importer_Secondline {
     
     function secondline_create_excerpt($content, $count) {
         if (empty($count)) $count = '40';
-        return substr(strip_tags($content), 0, intval($count));
+        $cutoff = intval($count);
+        $stripped_content = strip_tags($content);
+
+        if (strlen($stripped_content) >= $cutoff) {
+            return substr($stripped_content, 0, $cutoff) . "...";
+        } else {
+            return $stripped_content;
+        }
     }
 
 	// Main import function
