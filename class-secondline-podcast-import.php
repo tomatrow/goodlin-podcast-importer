@@ -355,7 +355,7 @@ class Podcast_Importer_Secondline {
 	}
     
     function secondline_create_excerpt($content, $count) {
-        if (empty($count)) $count = '40';
+        if (empty($count)) $count = '400';
         $cutoff = intval($count);
         $stripped_content = strip_tags($content);
 
